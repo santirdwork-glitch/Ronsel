@@ -154,7 +154,7 @@ export default function Empieza() {
             ))}
           </div>
 
-          <Link href="/formulario" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all duration-300 ease-out hover:opacity-90" style={{ backgroundColor: COLOR }}>
+          <Link href="/formulario?plan=Empieza" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all duration-300 ease-out hover:opacity-90" style={{ backgroundColor: COLOR }}>
             Quiero apuntarme — 9,99€/mes
           </Link>
 

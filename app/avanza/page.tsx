@@ -155,7 +155,7 @@ export default function Avanza() {
             ))}
           </div>
 
-          <Link href="/formulario" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all duration-300 ease-out hover:opacity-90" style={{ backgroundColor: COLOR }}>
+          <Link href="/formulario?plan=Avanza" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all duration-300 ease-out hover:opacity-90" style={{ backgroundColor: COLOR }}>
             Quiero apuntarme — 19,99€/mes
           </Link>
 

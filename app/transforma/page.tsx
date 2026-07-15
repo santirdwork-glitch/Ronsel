@@ -135,7 +135,7 @@ export default function Transforma() {
             {incluye.map((item) => <AccordionItem key={item.titulo} title={item.titulo} detail={item.detalle} />)}
           </div>
           
-          <Link href="/formulario" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all hover:opacity-90" style={{ backgroundColor: COLOR }}>
+          <Link href="/formulario?plan=Transforma" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all hover:opacity-90" style={{ backgroundColor: COLOR }}>
             Quiero apuntarme — 29,99€/mes
           </Link>
 

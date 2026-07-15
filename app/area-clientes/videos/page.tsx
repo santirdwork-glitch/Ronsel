@@ -1,7 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabaseClient";
+import { tienePlanSuficiente } from "@/lib/planes";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -33,6 +37,45 @@ const videos = [
 ];
 
 export default function Videos() {
+  const router = useRouter();
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    const comprobarPlan = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user.id;
+      if (!userId) {
+        router.push("/login");
+        return;
+      }
+
+      const { data: perfil } = await supabase
+        .from("perfiles")
+        .select("plan")
+        .eq("id", userId)
+        .single();
+
+      if (!perfil || !tienePlanSuficiente(perfil.plan, "Avanza")) {
+        router.push("/area-clientes");
+        return;
+      }
+
+      setCargando(false);
+    };
+
+    comprobarPlan();
+  }, [router]);
+
+  if (cargando) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <p className="text-sm uppercase tracking-widest text-[#B9C2BB]">
+          Cargando…
+        </p>
+      </div>
+    );
+  }
+
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
       <motion.div

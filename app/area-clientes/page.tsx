@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
+import { tienePlanSuficiente } from "@/lib/planes";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -45,30 +46,36 @@ export default function AreaClientesHome() {
   }, []);
 
   const accesos = [
-    {
-      titulo: "Menús",
-      subtitulo: "Tus menús semanales equilibrados",
-      foto: "https://picsum.photos/seed/ronsel-cliente-menus/700/500",
-      href: "/area-clientes/menus",
-      color: "#E8836C",
-    },
-    {
-      titulo: "Recetas",
-      subtitulo: "Fáciles, rápidas y de tu semana",
-      foto: "https://picsum.photos/seed/ronsel-cliente-recetas/700/500",
-      href: "/area-clientes/recetas",
-      color: "#2F6E68",
-    },
-    {
-      titulo: "Vídeos",
-      subtitulo: "Tus clases de Pilates y ejercicio",
-      foto: "https://picsum.photos/seed/ronsel-cliente-videos/700/500",
-      href: "/area-clientes/videos",
-      color: "#E2A63C",
-    },
-  ];
+  {
+    titulo: "Menús",
+    subtitulo: "Tus menús semanales equilibrados",
+    foto: "https://picsum.photos/seed/ronsel-cliente-menus/700/500",
+    href: "/area-clientes/menus",
+    color: "#E8836C",
+    planMinimo: "Empieza",
+  },
+  {
+    titulo: "Recetas",
+    subtitulo: "Fáciles, rápidas y de tu semana",
+    foto: "https://picsum.photos/seed/ronsel-cliente-recetas/700/500",
+    href: "/area-clientes/recetas",
+    color: "#2F6E68",
+    planMinimo: "Empieza",
+  },
+  {
+    titulo: "Vídeos",
+    subtitulo: "Tus clases de Pilates y ejercicio",
+    foto: "https://picsum.photos/seed/ronsel-cliente-videos/700/500",
+    href: "/area-clientes/videos",
+    color: "#E2A63C",
+    planMinimo: "Avanza",
+  },
+];
 
-  return (
+const accesosDisponibles = accesos.filter((item) =>
+  tienePlanSuficiente(plan, item.planMinimo)
+);  
+return (
     <section className="mx-auto max-w-6xl px-6 py-20">
       <motion.div
         initial="hidden"
@@ -91,7 +98,7 @@ export default function AreaClientesHome() {
       </motion.div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-        {accesos.map((item, i) => (
+        {accesosDisponibles.map((item, i) => (
           <MotionLink
             key={item.titulo}
             href={item.href}

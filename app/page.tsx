@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Great_Vibes, Playfair_Display } from "next/font/google";
@@ -81,7 +82,7 @@ export default function Home() {
             href="#planes"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="w-fit border border-white px-8 py-3 text-sm uppercase tracking-[0.2em] text-white hover:bg-white hover:text-[#1F1E1B] transition-colors"
+            className="w-fit rounded-full border border-white px-8 py-3 text-sm uppercase tracking-[0.2em] text-white hover:bg-white hover:text-[#1F1E1B] transition-colors"
           >
             Elige tu plan
           </MotionLink>
@@ -210,7 +211,7 @@ export default function Home() {
                     v.currentTime = 0;
                   }
                 }}
-                className="group flex flex-col border border-black/5 hover:shadow-xl transition-shadow"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 hover:shadow-xl transition-shadow"
               >
                 <div className="overflow-hidden">
                   {plan.foto.endsWith(".mp4") ? (
@@ -220,13 +221,13 @@ export default function Home() {
                       loop
                       muted
                       playsInline
-                      className="aspect-[4/5] w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      className="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <img
                       src={plan.foto}
                       alt=""
-                      className="aspect-[4/5] w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      className="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
                 </div>
@@ -250,13 +251,15 @@ export default function Home() {
         <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
           <div>
             <p className="mb-4 text-xs uppercase tracking-[0.2em] text-white">Novedades</p>
-            <div className="flex border-b border-white/25 pb-2">
+            <div className="flex items-center rounded-full border border-white/25 px-4 py-2">
               <input
                 type="email"
                 placeholder="Tu email"
                 className="w-full bg-transparent text-sm text-white placeholder-white/30 outline-none"
               />
-              <button>→</button>
+              <button className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm transition-colors hover:bg-white/20">
+                →
+              </button>
             </div>
           </div>
           <div>

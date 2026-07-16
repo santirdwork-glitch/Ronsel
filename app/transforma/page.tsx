@@ -122,7 +122,7 @@ export default function Transforma() {
       </nav>
 
       <section className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 py-20 lg:grid-cols-2 lg:gap-20">
-        <div className="overflow-hidden">
+        <div className="overflow-hidden rounded-2xl">
           <video
             src="/images/transforma/video-pag-transforma.mp4"
             autoPlay
@@ -142,7 +142,7 @@ export default function Transforma() {
             {incluye.map((item) => <AccordionItem key={item.titulo} title={item.titulo} detail={item.detalle} />)}
           </div>
           
-          <Link href="/formulario?plan=Transforma" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all hover:opacity-90" style={{ backgroundColor: COLOR }}>
+          <Link href="/formulario?plan=Transforma" className="mt-10 flex items-center justify-center rounded-full py-5 text-sm font-medium uppercase tracking-widest text-white transition-all hover:opacity-90" style={{ backgroundColor: COLOR }}>
             Quiero apuntarme — 29,99€/mes
           </Link>
 

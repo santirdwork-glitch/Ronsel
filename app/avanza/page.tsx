@@ -133,7 +133,7 @@ export default function Avanza() {
 
       {/* ============ HERO DE PRODUCTO ============ */}
       <section className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 py-20 lg:grid-cols-2 lg:gap-20">
-        <div className="overflow-hidden">
+        <div className="overflow-hidden rounded-2xl">
           <video
             src="/images/avanza/video-pag-avanza.mp4"
             autoPlay
@@ -162,7 +162,7 @@ export default function Avanza() {
             ))}
           </div>
 
-          <Link href="/formulario?plan=Avanza" className="mt-10 flex items-center justify-center py-5 text-sm font-medium uppercase tracking-widest text-white transition-all duration-300 ease-out hover:opacity-90" style={{ backgroundColor: COLOR }}>
+          <Link href="/formulario?plan=Avanza" className="mt-10 flex items-center justify-center rounded-full py-5 text-sm font-medium uppercase tracking-widest text-white transition-all duration-300 ease-out hover:opacity-90" style={{ backgroundColor: COLOR }}>
             Quiero apuntarme — 19,99€/mes
           </Link>
 
@@ -212,7 +212,7 @@ export default function Avanza() {
           <div className="flex flex-col gap-12 sm:flex-row">
             {otrosPlanes.map((plan) => (
               <Link key={plan.nombre} href={plan.href} className="group flex flex-1 flex-col gap-5">
-                <div className="overflow-hidden">
+                <div className="overflow-hidden rounded-2xl">
                   <img src={plan.foto} alt="" className="aspect-square w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-105" />
                 </div>
                 <div>
@@ -250,9 +250,9 @@ export default function Avanza() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 sm:grid-cols-4">
           <div>
             <p className="mb-6 text-sm uppercase tracking-[0.3em] text-white">Novedades Ronsel</p>
-            <div className="flex border-b border-white/25 pb-3">
+            <div className="flex items-center rounded-full border border-white/25 px-5 py-3">
               <input type="email" placeholder="Tu email" className="w-full bg-transparent text-lg text-white placeholder-white/40 outline-none" />
-              <button className="text-xl text-white">→</button>
+              <button className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-lg text-white transition-colors hover:bg-white/20">→</button>
             </div>
           </div>
           <div>

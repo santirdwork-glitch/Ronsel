@@ -49,7 +49,7 @@ export default function AreaClientesHome() {
   {
     titulo: "Menús",
     subtitulo: "Tus menús semanales equilibrados",
-    foto: "https://picsum.photos/seed/ronsel-cliente-menus/700/500",
+    foto: "/images/area-clientes/menus.jpg",
     href: "/area-clientes/menus",
     color: "#E8836C",
     planMinimo: "Empieza",
@@ -57,7 +57,7 @@ export default function AreaClientesHome() {
   {
     titulo: "Recetas",
     subtitulo: "Fáciles, rápidas y de tu semana",
-    foto: "https://picsum.photos/seed/ronsel-cliente-recetas/700/500",
+    foto: "/images/area-clientes/recetas.jpg",
     href: "/area-clientes/recetas",
     color: "#2F6E68",
     planMinimo: "Empieza",
@@ -65,7 +65,7 @@ export default function AreaClientesHome() {
   {
     titulo: "Vídeos",
     subtitulo: "Tus clases de Pilates y ejercicio",
-    foto: "https://picsum.photos/seed/ronsel-cliente-videos/700/500",
+    foto: "/images/area-clientes/videos.jpg",
     href: "/area-clientes/videos",
     color: "#E2A63C",
     planMinimo: "Avanza",
@@ -83,16 +83,16 @@ return (
         variants={fadeUp}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#e9e9e9]">
+        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#5b5b52]">
           Tu zona de clientes
         </p>
         <h1
-          className={`${playfair.className} mb-4 italic leading-[1] text-[#dadada]`}
+          className={`${playfair.className} mb-4 italic leading-[1] text-[#1F1E1B]`}
           style={{ fontSize: "clamp(2.25rem, 5vw, 4rem)" }}
         >
           Hola, {nombre}
         </h1>
-        <p className="mb-14 text-lg text-[#b6b6b6]">
+        <p className="mb-14 text-lg text-[#707070]">
           Tu plan actual es <span className="font-semibold text-[rgb(80,184,85)]">{plan}</span>.
         </p>
       </motion.div>

@@ -59,9 +59,9 @@ export default function AreaClientesLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[rgb(255,255,255)] text-[#F1ECE1]">
+    <div className="min-h-screen bg-[#2d3b30] text-[#F1ECE1]">
       {/* ============ NAVEGACIÓN COMPARTIDA (zona clientes) ============ */}
-      <nav className="flex items-center justify-between bg-[#1E2A24] px-6 py-6 shadow-md">
+      <nav className="flex items-center justify-between bg-[#112018] px-6 py-6 shadow-md">
         <Link href="/" className={`${greatVibes.className} text-3xl text-[#D8C9A3]`}>
           Ronsel
         </Link>

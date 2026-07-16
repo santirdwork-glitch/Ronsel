@@ -92,8 +92,8 @@ return (
         >
           Hola, {nombre}
         </h1>
-        <p className="mb-14 text-lg text-[#5b5b52]">
-          Tu plan actual es <span className="font-semibold text-[#2F6E68]">{plan}</span>.
+        <p className="mb-14 text-lg text-[#707070]">
+          Tu plan actual es <span className="font-semibold text-[rgb(80,184,85)]">{plan}</span>.
         </p>
       </motion.div>
 

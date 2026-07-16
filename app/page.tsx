@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 const greatVibes = Great_Vibes({ subsets: ["latin"], weight: "400" });
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"] });
 
-const MotionLink = motion(Link);
+const MotionLink = motion.create(Link);
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },

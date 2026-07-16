@@ -41,11 +41,11 @@ export default function Menus() {
         variants={fadeUp}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#000000]">
+        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#dadada]">
           Tu contenido
         </p>
         <h1
-          className={`${playfair.className} mb-14 italic leading-[1] text-[#1E2A24]`}
+          className={`${playfair.className} mb-14 italic leading-[1] text-[#dadada]`}
           style={{ fontSize: "clamp(2.25rem, 5vw, 4rem)" }}
         >
           Menús

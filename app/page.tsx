@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Great_Vibes, Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
@@ -17,11 +17,12 @@ const fadeUp = {
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const planes = [
-    { nombre: "Empieza", precio: "9,99", subtitulo: "Aprende a comer mejor, a tu ritmo", color: "#E8836C", foto: "https://picsum.photos/seed/ronsel-home-empieza/600/700", href: "/empieza" },
-    { nombre: "Avanza", precio: "19,99", subtitulo: "Alimentación + Pilates en casa", color: "#2F6E68", foto: "https://picsum.photos/seed/ronsel-home-avanza/600/700", href: "/avanza" },
-    { nombre: "Transforma", precio: "29,99", subtitulo: "Acompañamiento completo, cada día", color: "#E2A63C", foto: "https://picsum.photos/seed/ronsel-home-transforma/600/700", href: "/transforma" },
+    { nombre: "Empieza", precio: "9,99", subtitulo: "Aprende a comer mejor, a tu ritmo", color: "#E8836C", foto: "/images/video-empieza.mp4", href: "/empieza" },
+    { nombre: "Avanza", precio: "19,99", subtitulo: "Alimentación + Pilates en casa", color: "#2F6E68", foto: "/images/video-avanza.mp4", href: "/avanza" },
+    { nombre: "Transforma", precio: "29,99", subtitulo: "Acompañamiento completo, cada día", color: "#E2A63C", foto: "/images/video-transforma.mp4", href: "/transforma" },
   ];
 
   const valores = [
@@ -59,7 +60,7 @@ export default function Home() {
       {/* HERO */}
       <section className="relative h-[80vh] min-h-[500px] md:min-h-[650px] w-full overflow-hidden">
         <img
-          src="https://picsum.photos/seed/ronsel-home-hero/1600/1200"
+          src="/images/foto-home.jpg"
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -117,7 +118,7 @@ export default function Home() {
           className="h-64 sm:h-80 lg:h-auto"
         >
           <img
-            src="https://picsum.photos/seed/ronsel-home-turning-point/1000/1200"
+            src="/images/foto-home2.jpg"
             alt=""
             className="h-full w-full object-cover"
           />
@@ -201,14 +202,33 @@ export default function Home() {
                 transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.15 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onMouseEnter={() => videoRefs.current[i]?.play()}
+                onMouseLeave={() => {
+                  const v = videoRefs.current[i];
+                  if (v) {
+                    v.pause();
+                    v.currentTime = 0;
+                  }
+                }}
                 className="group flex flex-col border border-black/5 hover:shadow-xl transition-shadow"
               >
                 <div className="overflow-hidden">
-                  <img
-                    src={plan.foto}
-                    alt=""
-                    className="aspect-[4/5] w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                  />
+                  {plan.foto.endsWith(".mp4") ? (
+                    <video
+                      ref={(el) => { videoRefs.current[i] = el; }}
+                      src={plan.foto}
+                      loop
+                      muted
+                      playsInline
+                      className="aspect-[4/5] w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    />
+                  ) : (
+                    <img
+                      src={plan.foto}
+                      alt=""
+                      className="aspect-[4/5] w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    />
+                  )}
                 </div>
                 <div className="p-6 md:p-8">
                   <p className={`${playfair.className} mb-2 text-2xl md:text-3xl italic`} style={{ color: plan.color }}>

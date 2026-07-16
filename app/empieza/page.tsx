@@ -136,7 +136,15 @@ export default function Empieza() {
       {/* ============ HERO DE PRODUCTO ============ */}
       <section className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 py-20 lg:grid-cols-2 lg:gap-20">
         <div className="overflow-hidden">
-          <img src="https://picsum.photos/seed/ronsel-empieza-hero/900/1100" alt="" className="aspect-[4/5] w-full object-cover transition-transform duration-500 ease-out hover:scale-105" />
+          {/* Video corregido */}
+          <video
+            src="/images/empieza/video-pag-empieza.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="aspect-[4/5] w-full object-cover transition-transform duration-500 ease-out hover:scale-105"
+          />
         </div>
 
         <div className={`flex flex-col justify-center transition-all duration-700 ease-out ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>

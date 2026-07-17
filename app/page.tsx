@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Great_Vibes, Playfair_Display } from "next/font/google";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabaseClient";
 
 const greatVibes = Great_Vibes({ subsets: ["latin"], weight: "400" });
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"] });
@@ -15,10 +17,155 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
+const beneficios = [
+  { titulo: "Más energía", texto: "Aprende a alimentarte de forma equilibrada para sentirte con más vitalidad." },
+  { titulo: "Más organización", texto: "Olvídate de pensar cada día qué cocinar. Nosotros te ayudamos a planificarlo." },
+  { titulo: "Más movimiento", texto: "Disfruta de clases de Pilates y Gimnasia Funcional adaptadas para hacer desde casa." },
+  { titulo: "Menos estrés", texto: "Sin contar calorías constantemente. Sin prohibiciones. Sin culpa." },
+  { titulo: "Hábitos que duran", texto: "Porque el verdadero cambio no ocurre en una semana, sino en los pequeños pasos que repites cada día." },
+];
+
+const preguntas = [
+  {
+    pregunta: "¿Voy a pasar hambre?",
+    respuesta: "No. Nuestro objetivo no es que comas menos, sino que aprendas a alimentarte de forma equilibrada para sentirte con más energía y llegar a las comidas sin ansiedad.",
+  },
+  {
+    pregunta: "Nunca he hecho Pilates. ¿Podré seguir las clases?",
+    respuesta: "Claro. Las clases están adaptadas para todos los niveles y podrás hacerlas desde casa, a tu ritmo y cuando mejor te venga.",
+  },
+  {
+    pregunta: "No tengo tiempo para cocinar. ¿Esto es para mí?",
+    respuesta: "Sí. Las recetas están pensadas para personas con poco tiempo, con ingredientes fáciles de encontrar y preparaciones rápidas para el día a día.",
+  },
+  {
+    pregunta: "¿Puedo cancelar mi suscripción cuando quiera?",
+    respuesta: "Sí. No existe permanencia. Puedes cancelar tu suscripción en cualquier momento.",
+  },
+];
+
+// ============ MENÚ DE CUENTA (nuevo) ============
+function CuentaMenu() {
+  const router = useRouter();
+  const [cargando, setCargando] = useState(true);
+  const [sesion, setSesion] = useState<{ nombre: string | null } | null>(null);
+  const [abierto, setAbierto] = useState(false);
+
+  useEffect(() => {
+    const cargarSesion = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user.id;
+
+      if (!userId) {
+        setSesion(null);
+        setCargando(false);
+        return;
+      }
+
+      const { data: perfil } = await supabase
+        .from("perfiles")
+        .select("nombre")
+        .eq("id", userId)
+        .single();
+
+      setSesion({ nombre: perfil?.nombre ?? null });
+      setCargando(false);
+    };
+
+    cargarSesion();
+
+    // Se actualiza solo si la sesión cambia (login/logout en cualquier pestaña)
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      cargarSesion();
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setAbierto(false);
+    router.push("/");
+  };
+
+  if (cargando) {
+    // Espacio reservado del mismo tamaño aprox., evita que el nav "salte" al cargar
+    return <div className="h-4 w-24 justify-self-end" />;
+  }
+
+  return (
+    <div className="relative justify-self-end">
+      <button
+        onClick={() => setAbierto((a) => !a)}
+        className="flex items-center gap-1.5 whitespace-nowrap text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#5b5b52] hover:text-[#1F1E1B] transition-colors"
+      >
+        {sesion ? (sesion.nombre ? `Hola, ${sesion.nombre}` : "Mi cuenta") : "Área clientes"}
+        <motion.span animate={{ rotate: abierto ? 180 : 0 }} className="text-[8px]">
+          ▼
+        </motion.span>
+      </button>
+
+      <AnimatePresence>
+        {abierto && (
+          <>
+            {/* Capa invisible para cerrar el menú al hacer clic fuera */}
+            <div className="fixed inset-0 z-40" onClick={() => setAbierto(false)} />
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="absolute right-0 top-full z-50 mt-3 w-48 overflow-hidden rounded-xl border border-black/10 bg-white shadow-lg"
+            >
+              {sesion ? (
+                <>
+                  <Link
+                    href="/area-clientes"
+                    onClick={() => setAbierto(false)}
+                    className="block px-5 py-3 text-xs uppercase tracking-widest text-[#1F1E1B] hover:bg-[#FBF3E7] transition-colors"
+                  >
+                    Ir a mi área
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full px-5 py-3 text-left text-xs uppercase tracking-widest text-[#5b5b52] hover:bg-[#FBF3E7] transition-colors"
+                  >
+                    Cerrar sesión
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setAbierto(false)}
+                    className="block px-5 py-3 text-xs uppercase tracking-widest text-[#1F1E1B] hover:bg-[#FBF3E7] transition-colors"
+                  >
+                    Iniciar sesión
+                  </Link>
+                  <Link
+                    href="/formulario"
+                    onClick={() => setAbierto(false)}
+                    className="block border-t border-black/5 px-5 py-3 text-xs uppercase tracking-widest text-[#2F6E68] hover:bg-[#FBF3E7] transition-colors"
+                  >
+                    Crear cuenta
+                  </Link>
+                </>
+              )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const [faqAbierta, setFaqAbierta] = useState<number | null>(null);
 
   const planes = [
     { nombre: "Empieza", precio: "9,99", subtitulo: "Aprende a comer mejor, a tu ritmo", color: "#E8836C", foto: "/images/video-empieza.mp4", href: "/empieza" },
@@ -33,8 +180,6 @@ export default function Home() {
     { n: "04", texto: "Acompañamiento cercano y real" },
   ];
 
-  const enfoque = ["Nutrición", "Movimiento", "Hábitos", "Motivación", "Organización", "Acompañamiento"];
-
   return (
     <div className="min-h-screen bg-[#FBF3E7] text-[#1F1E1B]">
       {/* NAVEGACIÓN */}
@@ -44,12 +189,7 @@ export default function Home() {
           <Link href="/" className={`${greatVibes.className} justify-self-center text-4xl md:text-5xl lg:text-6xl text-[#2F6E68]`}>
             Ronsel
           </Link>
-          <Link
-            href="/login"
-            className="justify-self-end whitespace-nowrap text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#5b5b52] hover:text-[#1F1E1B] transition-colors"
-          >
-            Área clientes
-          </Link>
+          <CuentaMenu />
         </div>
         <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-14 border-t border-b border-black/10 px-4 py-4 text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#1F1E1B] overflow-x-auto">
           <Link href="/empieza" className="hover:opacity-60 transition-opacity whitespace-nowrap">Empieza</Link>
@@ -133,13 +273,10 @@ export default function Home() {
           className="flex flex-col justify-center px-6 py-12 md:py-16 lg:px-24"
         >
           <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#5b5b52]">Esto no es una dieta más</p>
-          <h2 className={`${playfair.className} mb-8 italic leading-[1] text-[#1F1E1B]`}
-              style={{ fontSize: "clamp(2rem, 8vw, 4.5rem)" }}>
-            Es tu punto de partida.
+          <h2 className={`${playfair.className} mb-8 italic leading-[1.05] text-[#1F1E1B]`}
+              style={{ fontSize: "clamp(1.7rem, 6vw, 3.2rem)" }}>
+            Mi objetivo no es que hagas una dieta durante un mes. Mi objetivo es darte las herramientas para que aprendas a cuidarte durante toda la vida.
           </h2>
-          <p className="mb-6 text-base md:text-lg leading-relaxed text-[#5b5b52]">
-            En Ronsel te ayudamos a construir hábitos que sí se sostienen, combinando alimentación real y movimiento a tu ritmo.
-          </p>
           <MotionLink
             href="#planes"
             whileHover={{ x: 4 }}
@@ -151,7 +288,50 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ENFOQUE INTEGRAL */}
+      {/* SOBRE MÍ — teaser */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 bg-[#FBF3E7]">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="order-2 lg:order-1 flex flex-col justify-center px-6 py-12 md:py-16 lg:px-24"
+        >
+          <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#5b5b52]">Quién hay detrás</p>
+          <h2 className={`${playfair.className} mb-6 italic leading-[1] text-[#1F1E1B]`}
+              style={{ fontSize: "clamp(2rem, 7vw, 3.8rem)" }}>
+            Hola, soy Noemí.
+          </h2>
+          <p className="mb-6 text-base md:text-lg leading-relaxed text-[#5b5b52]">
+            Empecé con el Pilates como complemento a mis entrenamientos de patinaje artístico, y con el tiempo entendí que el movimiento era solo una parte del camino. Así nació Ronsel: un proyecto donde uno la alimentación y el movimiento para ayudarte a crear hábitos que se sostienen, sin dietas imposibles.
+          </p>
+          <MotionLink
+            href="/sobre-mi"
+            whileHover={{ x: 4 }}
+            className="group flex w-fit items-center gap-4 text-sm uppercase tracking-[0.2em] text-[#2F6E68]"
+          >
+            Conoce mi historia
+            <span className="h-px w-8 bg-[#2F6E68] group-hover:w-12 transition-all" />
+          </MotionLink>
+        </motion.div>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+          className="order-1 lg:order-2 h-64 sm:h-80 lg:h-auto"
+        >
+          <img
+            src="/images/sobre-mi.jpg"
+            alt="Noemí, fundadora de Ronsel"
+            className="h-full w-full object-cover"
+          />
+        </motion.div>
+      </section>
+
+      {/* BENEFICIOS */}
       <motion.section
         variants={fadeUp}
         initial="hidden"
@@ -161,16 +341,17 @@ export default function Home() {
         className="bg-[#1F1E1B] px-6 py-16 md:py-24 lg:py-32"
       >
         <div className="mx-auto max-w-7xl">
-          <p className="mb-6 text-xs uppercase tracking-[0.2em] text-white/40">Nuestro enfoque</p>
+          <p className="mb-6 text-xs uppercase tracking-[0.2em] text-white/40">Qué puedes conseguir</p>
           <h2 className={`${playfair.className} mb-10 md:mb-16 lg:mb-20 italic leading-[1] text-white`}
               style={{ fontSize: "clamp(2.2rem, 8vw, 5.5rem)" }}>
-            Bienestar, sin fragmentos.
+            No buscamos cambios rápidos.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-white/15">
-            {enfoque.map((item, i) => (
-              <div key={item} className="border-b border-white/15 px-0 py-6 sm:px-8">
-                <span className="mr-4 text-xs text-white/40">{String(i + 1).padStart(2, "0")}</span>
-                <span className="text-lg text-white">{item}</span>
+            {beneficios.map((item, i) => (
+              <div key={item.titulo} className="border-b border-white/15 px-0 py-8 sm:px-8">
+                <span className="mb-3 block text-xs text-white/40">{String(i + 1).padStart(2, "0")}</span>
+                <p className="mb-2 text-lg font-medium text-white">{item.titulo}</p>
+                <p className="text-sm leading-relaxed text-white/60">{item.texto}</p>
               </div>
             ))}
           </div>
@@ -178,7 +359,7 @@ export default function Home() {
       </motion.section>
 
       {/* PLANES */}
-      <section id="planes" className="bg-white px-6 py-16 md:py-24 lg:py-32">
+      <section id="planes" className="bg-[#ffffff] px-6 py-16 md:py-24 lg:py-32">
         <div className="mx-auto max-w-7xl">
           <motion.h2
             variants={fadeUp}
@@ -186,7 +367,7 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className={`${playfair.className} mb-12 md:mb-16 text-center italic leading-[1] text-[#1F1E1B]`}
+            className={`${playfair.className} mb-12 md:mb-16 text-center italic leading-[1] text-white`}
             style={{ fontSize: "clamp(2.2rem, 8vw, 5rem)" }}
           >
             Elige tu camino
@@ -246,6 +427,61 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PREGUNTAS FRECUENTES */}
+      <motion.section
+        id="faq"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="bg-[#FBF3E7] px-6 py-16 md:py-24"
+      >
+        <div className="mx-auto max-w-3xl">
+          <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#5b5b52]">¿Tienes dudas?</p>
+          <h2 className={`${playfair.className} mb-10 md:mb-14 italic leading-[1] text-[#1F1E1B]`}
+              style={{ fontSize: "clamp(2rem, 6vw, 3.2rem)" }}>
+            Te las resolvemos.
+          </h2>
+          <div className="flex flex-col divide-y divide-black/10 border-t border-b border-black/10">
+            {preguntas.map((item, i) => {
+              const abierta = faqAbierta === i;
+              return (
+                <div key={item.pregunta}>
+                  <button
+                    onClick={() => setFaqAbierta(abierta ? null : i)}
+                    className="flex w-full items-center justify-between gap-4 py-6 text-left"
+                  >
+                    <span className="text-base md:text-lg font-medium text-[#1F1E1B]">{item.pregunta}</span>
+                    <motion.span
+                      animate={{ rotate: abierta ? 45 : 0 }}
+                      className="shrink-0 text-2xl text-[#2F6E68]"
+                    >
+                      +
+                    </motion.span>
+                  </button>
+                  <AnimatePresence>
+                    {abierta && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-6 text-sm md:text-base leading-relaxed text-[#5b5b52]">
+                          {item.respuesta}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.section>
+
       {/* FOOTER */}
       <footer className="bg-[#1F1E1B] px-6 py-12 md:py-16 text-white/60">
         <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
@@ -268,6 +504,13 @@ export default function Home() {
               <li><Link href="/empieza">Empieza</Link></li>
               <li><Link href="/avanza">Avanza</Link></li>
               <li><Link href="/transforma">Transforma</Link></li>
+            </ul>
+          </div>
+          <div>
+            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-white">Ayuda</p>
+            <ul className="flex flex-col gap-2 text-sm">
+              <li><Link href="/sobre-mi">Sobre mí</Link></li>
+              <li><Link href="#faq">Preguntas frecuentes</Link></li>
             </ul>
           </div>
           <div>

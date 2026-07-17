@@ -6,14 +6,15 @@ import Link from "next/link";
 import { Great_Vibes } from "next/font/google";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
+import { tienePlanSuficiente } from "@/lib/planes";
 
 const greatVibes = Great_Vibes({ subsets: ["latin"], weight: "400" });
 
 const ENLACES = [
-  { href: "/area-clientes", etiqueta: "Inicio" },
-  { href: "/area-clientes/menus", etiqueta: "Menús" },
-  { href: "/area-clientes/recetas", etiqueta: "Recetas" },
-  { href: "/area-clientes/videos", etiqueta: "Vídeos" },
+  { href: "/area-clientes", etiqueta: "Inicio", planMinimo: "Empieza" },
+  { href: "/area-clientes/menus", etiqueta: "Menús", planMinimo: "Empieza" },
+  { href: "/area-clientes/recetas", etiqueta: "Recetas", planMinimo: "Empieza" },
+  { href: "/area-clientes/videos", etiqueta: "Vídeos", planMinimo: "Avanza" },
 ];
 
 export default function AreaClientesLayout({
@@ -24,6 +25,7 @@ export default function AreaClientesLayout({
   const router = useRouter();
   const [cargando, setCargando] = useState(true);
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [planUsuario, setPlanUsuario] = useState<string | null>(null);
 
   useEffect(() => {
     const comprobarAcceso = async () => {
@@ -37,7 +39,7 @@ export default function AreaClientesLayout({
 
       const { data: perfil, error } = await supabase
         .from("perfiles")
-        .select("activo")
+        .select("activo, plan")
         .eq("id", userId)
         .single();
 
@@ -46,6 +48,7 @@ export default function AreaClientesLayout({
         return;
       }
 
+      setPlanUsuario(perfil.plan);
       setCargando(false);
     };
 
@@ -56,6 +59,12 @@ export default function AreaClientesLayout({
     await supabase.auth.signOut();
     router.push("/login");
   };
+
+  // Filtramos el menú según el plan del usuario, una sola vez, para usarlo
+  // tanto en el menú de escritorio como en el menú móvil
+  const enlacesDisponibles = ENLACES.filter((enlace) =>
+    planUsuario ? tienePlanSuficiente(planUsuario, enlace.planMinimo) : false
+  );
 
   if (cargando) {
     return (
@@ -81,7 +90,7 @@ export default function AreaClientesLayout({
 
           {/* Enlaces: visibles en pantallas medianas en adelante */}
           <div className="hidden items-center gap-8 text-sm uppercase tracking-widest text-[#F1ECE1] md:flex">
-            {ENLACES.map((enlace) => (
+            {enlacesDisponibles.map((enlace) => (
               <Link
                 key={enlace.href}
                 href={enlace.href}
@@ -139,7 +148,7 @@ export default function AreaClientesLayout({
               className="overflow-hidden md:hidden"
             >
               <div className="flex flex-col gap-1 pt-6 text-sm uppercase tracking-widest text-[#F1ECE1]">
-                {ENLACES.map((enlace) => (
+                {enlacesDisponibles.map((enlace) => (
                   <Link
                     key={enlace.href}
                     href={enlace.href}

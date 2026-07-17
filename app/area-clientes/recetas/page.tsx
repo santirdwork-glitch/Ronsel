@@ -95,7 +95,7 @@ export default function Recetas() {
         return (
           <div key={clave} className="mb-16">
             <h2
-              className={`${playfair.className} mb-6 text-2xl italic text-[#202521]`}
+              className={`${playfair.className} mb-6 text-2xl italic text-[#fafafa]`}
             >
               {etiqueta}
             </h2>

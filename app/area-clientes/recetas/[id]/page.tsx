@@ -96,7 +96,7 @@ export default function RecetaDetalle() {
       >
         <Link
           href="/area-clientes/recetas"
-          className="mb-8 inline-flex items-center gap-2 text-sm uppercase tracking-widest text-[#717271] transition-colors duration-200 hover:text-white"
+          className="mb-8 inline-flex items-center gap-2 text-sm uppercase tracking-widest text-[#ffffff] transition-colors duration-200 hover:text-white"
         >
           <span aria-hidden>←</span> Volver a recetas
         </Link>
@@ -181,7 +181,7 @@ export default function RecetaDetalle() {
                 >
                   <ul className="mb-6 space-y-2">
                     {ingredientesLista.map((ingrediente, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[#7e7e7e]">
+                      <li key={i} className="flex items-start gap-3 text-[#d4d4d4]">
                         <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-[#B9C2BB]" />
                         {ingrediente}
                       </li>
@@ -220,7 +220,7 @@ export default function RecetaDetalle() {
                   transition={{ duration: 0.35, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="mb-6 leading-relaxed text-[#868686]">
+                  <p className="mb-6 leading-relaxed text-[#d4d4d4]">
                     {receta.preparacion}
                   </p>
                 </motion.div>

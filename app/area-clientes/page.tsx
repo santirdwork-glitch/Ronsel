@@ -83,16 +83,16 @@ return (
         variants={fadeUp}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#5b5b52]">
+        <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#ececec]">
           Tu zona de clientes
         </p>
         <h1
-          className={`${playfair.className} mb-4 italic leading-[1] text-[#1F1E1B]`}
+          className={`${playfair.className} mb-4 italic leading-[1] text-[#ffffff]`}
           style={{ fontSize: "clamp(2.25rem, 5vw, 4rem)" }}
         >
           Hola, {nombre}
         </h1>
-        <p className="mb-14 text-lg text-[#707070]">
+        <p className="mb-14 text-lg text-[#ffffff]">
           Tu plan actual es <span className="font-semibold text-[rgb(80,184,85)]">{plan}</span>.
         </p>
       </motion.div>

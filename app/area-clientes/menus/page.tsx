@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
@@ -259,8 +260,8 @@ export default function Menus() {
                           ? recetasMapa[filaMomento.receta_id]
                           : null;
 
-                      return (
-                        <div key={clave} className="border-l-2 border-[#D8C9A3] pl-3">
+                      const contenido = (
+                        <>
                           <p className="text-xs uppercase tracking-widest text-[#B9C2BB]">
                             {etiqueta}
                           </p>
@@ -276,6 +277,26 @@ export default function Menus() {
                               {receta ? receta.titulo : "Sin receta asignada"}
                             </p>
                           </div>
+                        </>
+                      );
+
+                      // Si hay receta, todo el bloque es clicable y lleva a su página de detalle
+                      if (receta) {
+                        return (
+                          <Link
+                            key={clave}
+                            href={`/area-clientes/recetas/${receta.id}`}
+                            className="block border-l-2 border-[#D8C9A3] pl-3 transition-opacity hover:opacity-80"
+                          >
+                            {contenido}
+                          </Link>
+                        );
+                      }
+
+                      // Sin receta asignada, no tiene sentido que sea clicable
+                      return (
+                        <div key={clave} className="border-l-2 border-[#D8C9A3] pl-3">
+                          {contenido}
                         </div>
                       );
                     })}

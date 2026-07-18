@@ -39,6 +39,7 @@ type Receta = {
   id: number;
   titulo: string;
   categoria: string;
+  foto: string;
 };
 
 type FilaMenu = {
@@ -113,7 +114,7 @@ export default function Menus() {
       if (idsRecetas.length > 0) {
         const { data: recetasData } = await supabase
           .from("recetas")
-          .select("id, titulo, categoria")
+          .select("id, titulo, categoria, foto")
           .in("id", idsRecetas);
 
         (recetasData ?? []).forEach((receta) => {
@@ -263,9 +264,18 @@ export default function Menus() {
                           <p className="text-xs uppercase tracking-widest text-[#B9C2BB]">
                             {etiqueta}
                           </p>
-                          <p className="text-[#F1ECE1]">
-                            {receta ? receta.titulo : "Sin receta asignada"}
-                          </p>
+                          <div className="mt-1 flex items-center gap-3">
+                            {receta && (
+                              <img
+                                src={receta.foto}
+                                alt=""
+                                className="h-10 w-10 flex-shrink-0 rounded-lg object-cover"
+                              />
+                            )}
+                            <p className="text-[#F1ECE1]">
+                              {receta ? receta.titulo : "Sin receta asignada"}
+                            </p>
+                          </div>
                         </div>
                       );
                     })}

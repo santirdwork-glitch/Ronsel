@@ -301,10 +301,10 @@ export default function Home() {
           <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#5b5b52]">Quién hay detrás</p>
           <h2 className={`${playfair.className} mb-6 italic leading-[1] text-[#1F1E1B]`}
               style={{ fontSize: "clamp(2rem, 7vw, 3.8rem)" }}>
-            Hola, soy Noemí.
+            Hola, soy Noemi.
           </h2>
           <p className="mb-6 text-base md:text-lg leading-relaxed text-[#5b5b52]">
-            Empecé con el Pilates como complemento a mis entrenamientos de patinaje artístico, y con el tiempo entendí que el movimiento era solo una parte del camino. Así nació Ronsel: un proyecto donde uno la alimentación y el movimiento para ayudarte a crear hábitos que se sostienen, sin dietas imposibles.
+            Empecé con el Pilates como complemento a mis entrenamientos de patinaje agresivo, y con el tiempo entendí que el movimiento era solo una parte del camino. Así nació Ronsel: un proyecto donde uno la alimentación y el movimiento para ayudarte a crear hábitos que se sostienen, sin dietas imposibles.
           </p>
           <MotionLink
             href="/sobre-mi"
@@ -325,7 +325,7 @@ export default function Home() {
         >
           <img
             src="/images/sobre-mi.jpg"
-            alt="Noemí, fundadora de Ronsel"
+            alt="Noemi, fundadora de Ronsel"
             className="h-full w-full object-cover"
           />
         </motion.div>

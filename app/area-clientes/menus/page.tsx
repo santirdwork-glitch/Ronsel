@@ -166,6 +166,7 @@ type FilaMenu = {
 type SemanaInfo = {
   id: number;
   semana: number;
+  rango_fechas: string | null;
   lista_compra: string | null;
   presupuesto: string | null;
   consejo_general: string | null;
@@ -178,10 +179,11 @@ export default function Menus() {
   const [filas, setFilas] = useState<FilaMenu[]>([]);
   const [recetasMapa, setRecetasMapa] = useState<Record<number, Receta>>({});
   const [infoSemana, setInfoSemana] = useState<SemanaInfo | null>(null);
+  const [rangoFechasPorSemana, setRangoFechasPorSemana] = useState<Record<number, string>>({});
   const [cargando, setCargando] = useState(true);
   const [listaComprasAbierta, setListaComprasAbierta] = useState(false);
 
-  // 1. Al cargar la página, averiguamos qué semanas existen
+  // 1. Al cargar la página, averiguamos qué semanas existen y sus rangos de fecha
   useEffect(() => {
     async function cargarSemanasDisponibles() {
       const { data, error } = await supabase
@@ -196,6 +198,19 @@ export default function Menus() {
           setSemanaSeleccionada(unicas[0]);
         } else {
           setCargando(false);
+        }
+
+        // Traemos el texto de fechas de cada semana (para pintar los botones del selector)
+        const { data: infoTodas } = await supabase
+          .from("semanas_info")
+          .select("semana, rango_fechas");
+
+        if (infoTodas) {
+          const mapa: Record<number, string> = {};
+          infoTodas.forEach((fila) => {
+            if (fila.rango_fechas) mapa[fila.semana] = fila.rango_fechas;
+          });
+          setRangoFechasPorSemana(mapa);
         }
       } else {
         setCargando(false);
@@ -321,7 +336,7 @@ export default function Menus() {
                   : "bg-[#1E2A24] text-[#B9C2BB] hover:text-white"
               }`}
             >
-              Semana {semana}
+              {rangoFechasPorSemana[semana] ?? `Semana ${semana}`}
             </button>
           ))}
         </div>

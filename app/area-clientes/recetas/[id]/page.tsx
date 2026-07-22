@@ -40,6 +40,8 @@ export default function RecetaDetalle() {
   const [abierto, setAbierto] = useState<"ingredientes" | "preparacion" | null>(
     "ingredientes"
   );
+  const [listaAbierta, setListaAbierta] = useState(false);
+  const [marcados, setMarcados] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const cargarReceta = async () => {
@@ -86,6 +88,10 @@ export default function RecetaDetalle() {
     .split(",")
     .map((i) => i.trim())
     .filter(Boolean);
+
+  const toggleMarcado = (i: number) => {
+    setMarcados((prev) => ({ ...prev, [i]: !prev[i] }));
+  };
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-12 md:py-20">
@@ -141,7 +147,7 @@ export default function RecetaDetalle() {
 
           <motion.div
             variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}
-            className="mb-10 flex gap-4"
+            className="mb-4 flex flex-wrap items-center gap-4"
           >
             <span className="rounded-full bg-[#1E2A24] px-5 py-2 text-sm text-[#F1ECE1] shadow-md">
               {receta.kcal} kcal
@@ -149,7 +155,54 @@ export default function RecetaDetalle() {
             <span className="rounded-full bg-[#1E2A24] px-5 py-2 text-sm text-[#F1ECE1] shadow-md">
               {receta.proteina} g proteína
             </span>
+            <button
+              onClick={() => setListaAbierta((a) => !a)}
+              className="flex items-center gap-2 rounded-full bg-[#D8C9A3] px-5 py-2 text-sm font-medium text-[#1E2A24] shadow-md transition-opacity hover:opacity-90"
+            >
+              <span aria-hidden>🛒</span> Lista de la compra
+            </button>
           </motion.div>
+
+          <AnimatePresence initial={false}>
+            {listaAbierta && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="mb-6 overflow-hidden"
+              >
+                <div className="rounded-2xl bg-[#1E2A24] p-6">
+                  <p className="mb-4 text-xs uppercase tracking-widest text-[#D8C9A3]">
+                    Ingredientes de esta receta
+                  </p>
+                  <ul className="space-y-3">
+                    {ingredientesLista.map((ingrediente, i) => (
+                      <li key={i}>
+                        <label className="flex cursor-pointer items-start gap-3">
+                          <input
+                            type="checkbox"
+                            checked={!!marcados[i]}
+                            onChange={() => toggleMarcado(i)}
+                            className="mt-1 h-4 w-4 flex-shrink-0 accent-[#D8C9A3]"
+                          />
+                          <span
+                            className={
+                              marcados[i]
+                                ? "text-[#7c8880] line-through"
+                                : "text-[#F1ECE1]"
+                            }
+                          >
+                            {ingrediente}
+                          </span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <motion.div
             variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}

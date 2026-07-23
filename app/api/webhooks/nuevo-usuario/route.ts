@@ -31,11 +31,11 @@ function generarHtmlBienvenida(nombre: string | null) {
                   </p>
 
                   <p style="margin:0 0 18px 0; font-size:16px; line-height:1.6; color:#F1ECE1;">
-                    A partir de ahora tienes un espacio pensado para cuidarte de verdad: nutrición, movimiento y bienestar, sin complicaciones y con acompañamiento real.
+                    En cuanto recibamos el pago tendrás un espacio pensado para cuidarte de verdad: nutrición, movimiento y bienestar, sin complicaciones y con acompañamiento real.
                   </p>
 
                   <p style="margin:0 0 32px 0; font-size:16px; line-height:1.6; color:#F1ECE1;">
-                    Tu área de clientes ya está lista. Ahí encontrarás tus menús semanales, recetas y todo el contenido pensado para ti.
+                    En tu área de clientes encontrarás tus menús semanales, recetas y todo el contenido pensado para ti.
                   </p>
 
                   <table role="presentation" cellpadding="0" cellspacing="0">

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: "Ronsel <bienvenida@ronsel.com>",
       to: email,
       subject: "¡Bienvenido/a a Ronsel!",
@@ -31,7 +31,15 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ ok: true });
+    // Resend no siempre lanza una excepción si algo falla: a veces devuelve
+    // { data: null, error: {...} } sin más. Hay que comprobarlo explícitamente.
+    if (error) {
+      console.error("Resend devolvió un error:", error);
+      return NextResponse.json({ error: error.message ?? "Error de Resend" }, { status: 500 });
+    }
+
+    console.log("Email enviado correctamente, id:", data?.id);
+    return NextResponse.json({ ok: true, id: data?.id });
   } catch (error) {
     console.error("Error enviando email de bienvenida:", error);
     return NextResponse.json({ error: "Error enviando email" }, { status: 500 });
